@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-#define BET 500
+#define BET 500	// 베팅액 고정
 
 typedef enum
 {
@@ -38,13 +38,13 @@ typedef enum
 	ONETHREESPECIAL,
 	ONEEIGHTSPECIAL,
 	THREEEIGHTSPECIAL
-}Combinations;
+}Combinations;	// 족보
 
 typedef struct
 {
 	int number;
 	bool special;
-}Card;
+}Card; // 카드 구조체
 
 typedef struct
 {
@@ -53,12 +53,12 @@ typedef struct
 	Card card1;
 	Card card2;
 	Combinations combine;
-}Player;
+}Player; // 플레이어 구조체
 
-void InitCards(Card* cards);
-void Shuffle(Card* cards);
-Combinations Combination(Card card1, Card card2);
-void ShowResult(Player* player, int index);
+void InitCards(Card* cards); // 카드 생성
+void Shuffle(Card* cards); // 카드 셔플
+Combinations Combination(Card card1, Card card2); // 족보 계산
+void ShowResult(Player* player, int index); // 결과 출력
 
 int main()
 {
@@ -75,12 +75,12 @@ int main()
 		int playerNum = 0;
 
 		printf("섯다 게임\n");
-		printf("플레이어 수를 정하시오. (열명까지) : ");
+		printf("플레이어 수를 정하시오. (열명까지) : "); // 20장의 카드를 2장씩 사용하므로 10명이 최대
 		scanf_s("%d", &playerNum);
 
-		Player* player = (Player*)malloc(sizeof(Player) * playerNum);
+		Player* player = (Player*)malloc(sizeof(Player) * playerNum); // 입력한 플레이어 수 만큼 동적할당으로 player 생성
 	
-		for (int i = 0; i < playerNum; i++)
+		for (int i = 0; i < playerNum; i++) // 플레이어 이름 입력
 		{
 			char buffer[100] = { 0 };
 
@@ -96,7 +96,7 @@ int main()
 			InitCards(cards);
 			Shuffle(cards);
 
-			for (int i = 0; i < playerNum; i++)
+			for (int i = 0; i < playerNum; i++) // 플레이어 카드 돌리기
 			{
 				player[i].card1.number = cards[i].number;
 				player[i].card1.special = cards[i].special;
@@ -107,7 +107,7 @@ int main()
 			}
 
 			Combinations max = ZEROPLUS;
-			for (int i = 0; i < playerNum; i++)
+			for (int i = 0; i < playerNum; i++) // 가장 높은 족보 찾기
 			{
 				if (max < player[i].combine)
 					max = player[i].combine;
@@ -115,7 +115,8 @@ int main()
 
 			int prize = 0;
 			int winner = 0;
-			for (int i = 0; i < playerNum; i++)
+			for (int i = 0; i < playerNum; i++) // 가장 높은 족보보다 낮으면 베팅액만큼 잃고, 잃은 금액은 상금에 쌓는다
+												// 그리고 가장 높은족보 들고있는 사람수 카운트
 			{
 				if (max != player[i].combine)
 				{
@@ -128,7 +129,7 @@ int main()
 				}
 			}
 
-			for (int i = 0; i < playerNum; i++)
+			for (int i = 0; i < playerNum; i++) // 가장 높은 족보들고있는 사람에게 상금 / 중복인원 만큼 상금 분배
 			{
 				if (max == player[i].combine)
 				{
@@ -136,7 +137,7 @@ int main()
 				}
 			}
 
-			ShowResult(player, playerNum);
+			ShowResult(player, playerNum); // 결과 출력
 
 			printf("0. 스톱 1. 계속 : ");
 			scanf_s("%d", &CurrentGame);
