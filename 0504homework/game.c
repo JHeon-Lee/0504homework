@@ -69,6 +69,8 @@ int main()
 
 	while (1)
 	{
+		system("cls");
+
 		Card cards[20];
 		int playerNum = 0;
 
@@ -77,13 +79,14 @@ int main()
 		scanf_s("%d", &playerNum);
 
 		Player* player = (Player*)malloc(sizeof(Player) * playerNum);
-		char(*namePtr)[100] = (char*)malloc(sizeof(char) * playerNum);
 	
 		for (int i = 0; i < playerNum; i++)
 		{
+			char buffer[100] = { 0 };
+
 			printf("%d번째 플레이어의 이름을 정하시오. (영문 100자, 한글 50자 이내) : ", i + 1);
-			scanf_s(" %s", namePtr[i], sizeof(namePtr[i]));
-			strcpy_s(player[i].name, 100, namePtr[i]);
+			scanf_s(" %s", buffer, sizeof(buffer));
+			strcpy_s(player[i].name, 100, buffer);
 
 			player[i].money = 10000;
 		}
@@ -139,9 +142,6 @@ int main()
 			scanf_s("%d", &CurrentGame);
 			if (CurrentGame == 0)
 			{
-				free(namePtr);
-				namePtr = NULL;
-
 				free(player);
 				player = NULL;
 
@@ -164,7 +164,7 @@ void InitCards(Card* cards)
 		for (int j = 0; j < 2; j++)
 		{
 			cards[i + j * 10].number = i + 1;
-			if(i == 0 || i == 2 || i == 7)
+			if((i == 0 || i == 2 || i == 7) && j == 1)
 				cards[i + j * 10].special = 1;
 			else
 				cards[i + j * 10].special = 0;
